@@ -65,19 +65,23 @@ public class UploadAvatarServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Tạo thư mục lưu ảnh nếu chưa có
         String appPath = request.getServletContext().getRealPath("");
         String uploadPath = appPath + File.separator + UPLOAD_DIR;
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdir();
 
+        // Lấy file người dùng upload
         Part filePart = request.getPart("avatar");
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
         String filePath = uploadPath + File.separator + fileName;
         filePart.write(filePath);
 
+        // Lưu đường dẫn file vào session hoặc database nếu cần
         request.setAttribute("message", "Upload thành công: " + fileName);
 
+        // Redirect hoặc hiển thị lại trang
         request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 

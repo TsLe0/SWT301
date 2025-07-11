@@ -4,52 +4,55 @@
  */
 package Controller;
 
-import DAO.RoomImageDAO;
+import DAO.BookingDAO;
 import DAO.RoomTypeDAO;
-import DAO.RoomsDAO;
-import Models.Room;
-import Models.RoomImage;
+import DAO.UserDAO;
+import Models.Booking;
 import Models.RoomType;
+import Models.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class GetAllRooms extends HttpServlet {
-    
-    RoomsDAO dao = new RoomsDAO();
-    RoomTypeDAO typeDao = new RoomTypeDAO();
-    RoomImageDAO imageDAO = new RoomImageDAO();
+public class BookingResult extends HttpServlet {
+    BookingDAO bDAo = new BookingDAO();
+    UserDAO uDao = new UserDAO();
+    RoomTypeDAO rtDao = new RoomTypeDAO();
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String bookingIdRaw = request.getParameter("bookingId");
         
-        List<List<RoomImage>> iList = new ArrayList<>();
-        List<RoomType> tList = typeDao.getAllRoomType();
+        int bookingId = Integer.parseInt(bookingIdRaw);
         
-        for (RoomType r : tList) {
-            iList.add(imageDAO.getAllRoomImageByRoomTypeId(r.getRoomTypeID()));
-        }
-        request.setAttribute("iList", iList);
-        System.out.println(iList.get(0));
-        request.setAttribute("tList", tList);
-        request.getRequestDispatcher("room.jsp").forward(request, response);
+        Booking b = bDAo.getById(bookingId);
+        
+        User user = uDao.getUserById(b.getUserId());
+        RoomType rt = rtDao.getRoomTypeById(b.getRoomTypeId());
+        
+        request.setAttribute("booking", b);
+        request.setAttribute("userEmail", user.getEmail());
+        request.setAttribute("roomType", rt.getRoomTypeName());
+        request.getRequestDispatcher("bookingSuccess.jsp").forward(request, response);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
     }
-    
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

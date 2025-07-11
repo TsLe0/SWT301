@@ -91,14 +91,18 @@ public class loginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("account", user);
 
+            System.out.println("Login session ID: " + session.getId());
+
             // Remember function
             if ("on".equals(rememberMe)) {
                 Cookie usernameCookie = new Cookie("username", username);
-                usernameCookie.setMaxAge(60 * 60 * 24 * 7); 
-//                passwordCookie.setMaxAge(60 * 60 * 24 * 7); 
+//                Cookie passwordCookie = new Cookie("password", password); // Chú ý không lưu mật khẩu thô vào cookie trong thực tế!
+                usernameCookie.setMaxAge(60 * 60 * 24 * 7); // 7 ngày
+//                passwordCookie.setMaxAge(60 * 60 * 24 * 7); // 7 ngày
                 response.addCookie(usernameCookie);
 //                response.addCookie(passwordCookie);
             } else {
+                // Xóa cookie nếu không chọn Remember Me
                 Cookie[] cookies = request.getCookies();
                 if (cookies != null) {
                     for (Cookie cookie : cookies) {

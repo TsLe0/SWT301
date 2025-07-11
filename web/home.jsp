@@ -17,9 +17,21 @@
         </style>
     </head>
     <body class="bg-white text-gray-800">
-    <body class="bg-white text-gray-800">
         <!-- Header -->
-         <jsp:include page="header.jsp" />
+        <jsp:include page="header.jsp" />
+
+        <!-- Booking Success Message -->
+        <c:if test="${not empty sessionScope.bookingSuccess}">
+            <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-7xl mx-auto my-4" role="alert">
+                <strong class="font-bold">Thành công!</strong>
+                <span class="block sm:inline">${sessionScope.bookingSuccess}</span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="document.getElementById('success-alert').style.display='none';">
+                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                </span>
+            </div>
+            <c:remove var="bookingSuccess" scope="session" />
+        </c:if>
+
         <!-- Hero & Booking Form -->
         <section class="relative bg-gradient-to-r from-blue-700 to-blue-900 text-white">
             <img alt="Khách sạn Mường Thanh sang trọng với kiến trúc hiện đại và ánh đèn lung linh buổi tối" class="absolute inset-0 w-full h-full object-cover opacity-30" height="600" src="https://storage.googleapis.com/a1aa/image/40bb647b-9c81-4b98-b0b3-d6bcfb664afa.jpg" width="1920"/>
@@ -39,19 +51,19 @@
                             <label class="block text-gray-700 font-semibold mb-1" for="checkin">
                                 Ngày Đến
                             </label>
-                            <input class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="checkin" name="checkin" required="" type="date"/>
+                            <input class="w-full text-black border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="checkin" name="checkin" required="" type="date"/>
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-1" for="checkout">
                                 Ngày Đi
                             </label>
-                            <input class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="checkout" name="checkout" required="" type="date"/>
+                            <input class="w-full text-black border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="checkout" name="checkout" required="" type="date"/>
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-1" for="hotel">
                                 Chọn khách sạn
                             </label>
-                            <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="hotel" name="hotel" required="">
+                            <select class="w-full border text-black border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="hotel" name="hotel" required="">
                                 <option disabled="" selected="" value="">
                                     Chọn khách sạn
                                 </option>
@@ -73,7 +85,7 @@
                             <label class="block text-gray-700 font-semibold mb-1" for="room-type">
                                 Loại phòng
                             </label>
-                            <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="room-type" name="room-type" required="">
+                            <select class="w-full text-black border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="room-type" name="room-type" required="">
                                 <option disabled="" selected="" value="">
                                     Chọn loại phòng
                                 </option>
@@ -95,7 +107,7 @@
                             <label class="block text-gray-700 font-semibold mb-1" for="guests">
                                 Số khách
                             </label>
-                            <input class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="guests" max="10" min="1" name="guests" required="" type="number" value="1"/>
+                            <input class="w-full text-black border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600" id="guests" max="10" min="1" name="guests" required="" type="number" value="1"/>
                         </div>
                         <div class="flex items-end">
                             <button class="w-full bg-blue-700 text-white font-semibold rounded-md py-3 hover:bg-blue-800 transition" type="submit">
@@ -222,12 +234,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="bg-blue-900 text-white py-6">
-            <div class="max-w-7xl mx-auto text-center text-sm">
-                &copy; 2025 Mường Thanh Hospitality. Đã đăng ký bản quyền.
-            </div>
-        </footer>
-
+              <jsp:include page="footer.jsp" />
         <script>
             document.getElementById('menu-btn').addEventListener('click', function () {
                 const menu = document.getElementById('mobile-menu');

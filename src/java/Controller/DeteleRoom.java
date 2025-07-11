@@ -70,6 +70,7 @@ public class DeteleRoom extends HttpServlet {
             request.setAttribute("errorMessage", "Không thể vô hiệu hóa phòng: " + e.getMessage());
         }
 
+        // Redirect về danh sách phòng
         response.sendRedirect("adminroom");
     
     }

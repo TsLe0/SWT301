@@ -1,15 +1,12 @@
 
-import DAO.RoomsDAO;
-import Models.Room;
-import java.util.List;
-
-
+import java.sql.Date;
+import DAO.BookingDAO;
+import Models.Booking;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-
 /**
  *
  * @author Admin
@@ -20,28 +17,24 @@ public class NewMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-  RoomsDAO dao = new RoomsDAO();
+        // Tạo đối tượng Booking
+ Booking booking = new Booking();
+        booking.setUserId(1); // UserID đã tồn tại trong DB
+        booking.setRoomTypeId(2); // RoomTypeID đã tồn tại
+        booking.setRoomNumber(null);
+        booking.setCheckinDate(Date.valueOf("2025-07-10"));
+        booking.setCheckoutDate(Date.valueOf("2025-07-15"));
+        booking.setNumberOfGuests(2);
+        booking.setTotalPrice(1500000.0);
+        booking.setStatus("Pending");
+        booking.setBookingDate(new Date(System.currentTimeMillis()));
+        booking.setSpecialRequests("Cần phòng gần thang máy");
 
-        // Giả sử roomNumber = "A101" đang có trong DB của bạn
-        String roomNumber = "A101";
-        int roomTypeId = 2;   // Ví dụ RoomTypeID = 2
-        int statusId = 1;     // Ví dụ RoomStatusID = 1 (Available)
-        String roomDesc = "Updated description for room A101";
-        double roomPrice = 1500000.0;   // 1,500,000 VND
+        // Gọi DAO để thêm vào DB
+        BookingDAO dao = new BookingDAO();
 
-        dao.updateRoom(roomNumber, roomTypeId, statusId, roomDesc, roomPrice);
+        // In kết quả
     }
-
-    public static void allRoom( ) {
-        RoomsDAO _dao = new RoomsDAO();
-//       List<Room> x = _dao.getAllRoom();
-//       for(Room c:x){
-//            System.out.println(c);
-//       }
-       _dao.addRooms("123", 2, 1, "ALi", 0);
-      
-    }
-
-    
-    
 }
+
+

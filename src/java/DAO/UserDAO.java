@@ -16,6 +16,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class UserDAO extends DBContext {
 
+    // Phương thức kiểm tra đăng nhập
     public User login(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try {
@@ -35,7 +36,7 @@ public class UserDAO extends DBContext {
                     );
                 }
             }
-            return null;
+            return null; // Tài khoản không tồn tại hoặc mật khẩu không đúng
         } catch (SQLException e) {
             System.out.println(e);
             return null;
@@ -43,6 +44,7 @@ public class UserDAO extends DBContext {
 
     }
 
+    // Phương thức đăng ký người dùng
     public void register(User user) throws SQLException {
         String sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
         try {
@@ -56,6 +58,7 @@ public class UserDAO extends DBContext {
         }
     }
 
+    // Phương thức lấy tất cả người dùng
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
@@ -77,6 +80,7 @@ public class UserDAO extends DBContext {
         return users;
     }
 
+    // Phương thức xóa người dùng
     public void deleteUser(int userId) {
         String sql = "DELETE FROM users WHERE user_id = ?";
         try {
@@ -88,6 +92,7 @@ public class UserDAO extends DBContext {
         }
     }
 
+    // Phương thức cập nhật thông tin người dùng
     public void updateUser(String email, String phone, String address, int id, String name) {
         String sql = "UPDATE users SET email = ?, phone = ?, address = ?, username = ? WHERE user_id = ?";
         try {
@@ -160,6 +165,7 @@ public class UserDAO extends DBContext {
     }
 
     public void resetPassword(int userId, String newPassword) {
+        // Giả sử bạn đã sử dụng Bcrypt để mã hóa mật khẩu
         String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         String query = "UPDATE users SET password = ? WHERE user_id = ?";
         try {

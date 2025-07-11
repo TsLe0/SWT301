@@ -6,9 +6,7 @@ package Controller;
 
 import DAO.RoomTypeDAO;
 import DAO.RoomsDAO;
-import DAO.StatusDAO;
 import Models.Room;
-import Models.RoomStatus;
 import Models.RoomType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -20,17 +18,14 @@ import java.util.List;
 
 public class AddRoomServlet extends HttpServlet {
 
-    StatusDAO statusDao = new StatusDAO();
     RoomTypeDAO roomTypeDAO = new RoomTypeDAO();
     RoomsDAO dao = new RoomsDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<RoomStatus> statusList = statusDao.getAllStatus();
         List<RoomType> roomTypeList = roomTypeDAO.getAllRoomType();
 
-        request.setAttribute("statusList", statusList);
         request.setAttribute("roomTypeList", roomTypeList);
         request.getRequestDispatcher("addRoom.jsp").forward(request, response);
 
@@ -46,14 +41,12 @@ public class AddRoomServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String roomNumber = request.getParameter("roomNumber");
-        String roomDesc = request.getParameter("roomDesc");
-        double price = Double.parseDouble(request.getParameter("price"));
         int roomTypeId = Integer.parseInt(request.getParameter("roomTypeId"));
-        int statusId = Integer.parseInt(request.getParameter("roomStatusId"));
+        String roomStatus = request.getParameter("roomStatus");
 
         HttpSession session = request.getSession();
 
-        if (!roomNumber.isEmpty()) {
+        if (roomNumber != null && !roomNumber.trim().isEmpty()) {
             for (Room r : dao.getAllRoom()) {
                 if (r.getRoomNumber().equalsIgnoreCase(roomNumber)) {
                     session.setAttribute("addRoomError", "Room number already existed.");
@@ -61,14 +54,24 @@ public class AddRoomServlet extends HttpServlet {
                     return;
                 }
             }
+        } else {
+            session.setAttribute("addRoomError", "Room number cannot be empty.");
+            response.sendRedirect("add-room");
+            return;
         }
-        if (roomNumber.length() > 5) {
-            session.setAttribute("addRoomError", "Room number must not exceed 5 characters.");
+        
+        if (roomNumber.length() > 10) {
+            session.setAttribute("addRoomError", "Room number must not exceed 10 characters.");
             response.sendRedirect("add-room");
             return;
         }
 
-        dao.addRooms(roomNumber, roomTypeId, statusId, roomDesc, price);
+        Room newRoom = new Room();
+        newRoom.setRoomNumber(roomNumber);
+        newRoom.setRoomTypeID(roomTypeId);
+        newRoom.setRoomStatus(roomStatus);
+        
+        dao.addRoom(newRoom);
 
         response.sendRedirect("adminroom");
     }
