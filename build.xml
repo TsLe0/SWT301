@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HotelManagement" default="sonar" basedir="." xmlns:sonar="antlib:org.sonar.ant">
+
+    <description>SonarQube scan for JavaApplication1</description>
+
+    <!-- Tải thư viện Sonar Ant -->
+    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+        <classpath>
+            <pathelement location="lib/sonarqube-ant-task-2.7.1.1951.jar"/>
+        </classpath>
+    </taskdef>
+
+    <!-- Cấu hình thuộc tính Sonar -->
+    <property name="sonar.projectKey" value="HotelManager"/>
+    <property name="sonar.projectName" value="HotelManagement"/>
+    <property name="sonar.projectVersion" value="1.0"/>
+    <property name="sonar.sources" value="src"/>
+    <property name="sonar.java.binaries" value="build/classes"/>
+    <property name="sonar.sourceEncoding" value="UTF-8"/>
+    <property name="sonar.host.url" value="http://localhost:9000"/>
+    <property name="sonar.login" value="sqp_b0110e9d38ccdd499a051b9c45ad8343d98a6502"/>
+
+    <!-- Nếu bạn muốn tự viết compile -->
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes"/>
+    </target>
+
+    <!-- Sonar target -->
+    <target name="sonar" depends="compile">
+        <sonar:sonar/>
+    </target>
+
+</project>
