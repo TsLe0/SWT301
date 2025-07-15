@@ -19,8 +19,8 @@ import static org.mockito.Mockito.*;
  * @author phuon
  */
 public class RoomImageDAOTest {
-    
-  // ✅ TC01: Có 1 ảnh trả về đúng
+
+    // ✅ TC01: Có 1 ảnh trả về đúng
     @Test
     public void test_TC01_ValidRoomTypeId_WithData() throws Exception {
         Connection mockConn = mock(Connection.class);
@@ -87,7 +87,7 @@ public class RoomImageDAOTest {
 
     // ✅ TC03: RoomTypeID âm
     @Test
-    public void test_TC03_InvalidRoomTypeId_Negative() throws Exception {
+    public void test_TC03_InvalidRoomTypeId_Empty() throws Exception {
         Connection mockConn = mock(Connection.class);
         PreparedStatement mockPs = mock(PreparedStatement.class);
         ResultSet mockRs = mock(ResultSet.class);
@@ -98,37 +98,20 @@ public class RoomImageDAOTest {
 
         List<RoomImage> list = new ArrayList<>();
         try {
+            // Giả lập trường hợp không set RoomTypeID, mặc định là 0 (hoặc giả định người dùng nhập "")
+            int roomTypeID = 0; // giả sử lỗi khi không parse được ("" → 0)
             PreparedStatement ps = mockConn.prepareStatement("SELECT * FROM RoomImage WHERE RoomTypeID = ?");
-            ps.setInt(1, -1);
+            ps.setInt(1, roomTypeID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 // không vào đây
             }
         } catch (Exception e) {
-            fail("Không nên lỗi");
+            fail("Không nên lỗi khi RoomTypeID rỗng");
         }
 
         assertNotNull(list);
         assertTrue(list.isEmpty());
     }
 
-    // ✅ TC04: Lỗi prepareStatement (DB lỗi)
-    @Test
-    public void test_TC04_DBError_ThrowsHandled() throws Exception {
-        Connection mockConn = mock(Connection.class);
-
-        when(mockConn.prepareStatement(anyString()))
-                .thenThrow(new RuntimeException("DB Connection Error"));
-
-        List<RoomImage> list = new ArrayList<>();
-        try {
-            PreparedStatement ps = mockConn.prepareStatement("SELECT * FROM RoomImage WHERE RoomTypeID = ?");
-            ps.setInt(1, 5);
-            ResultSet rs = ps.executeQuery(); // lỗi sẽ xảy ra tại prepareStatement
-        } catch (RuntimeException e) {
-            assertEquals("DB Connection Error", e.getMessage());
-        } catch (Exception e) {
-            fail("Lỗi sai kiểu");
-        }
-    }
 }

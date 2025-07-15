@@ -9,18 +9,11 @@ import java.util.List;
 public class Room {
 
     private String roomNumber;
-    private int roomTypeID;
+    private String roomTypeID;
     private RoomType roomType;
     private String roomStatus;
 
     public Room() {
-    }
-
-    public Room(String roomNumber, int roomTypeID, RoomType roomType, String roomStatus) {
-        this.roomNumber = roomNumber;
-        this.roomTypeID = roomTypeID;
-        this.roomType = roomType;
-        this.roomStatus = roomStatus;
     }
 
     public String getRoomNumber() {
@@ -31,11 +24,11 @@ public class Room {
         this.roomNumber = roomNumber;
     }
 
-    public int getRoomTypeID() {
+    public String getRoomTypeID() {
         return roomTypeID;
     }
 
-    public void setRoomTypeID(int roomTypeID) {
+    public void setRoomTypeID(String roomTypeID) {
         this.roomTypeID = roomTypeID;
     }
 
@@ -59,9 +52,5 @@ public class Room {
     public String toString() {
         return "Room{" + "roomNumber=" + roomNumber + ", roomTypeID=" + roomTypeID + ", roomType=" + roomType + ", roomStatus=" + roomStatus + '}';
     }
-
-  
-    
-
 
 }

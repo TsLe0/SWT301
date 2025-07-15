@@ -52,7 +52,7 @@ public class RoomTypeDAO {
         return list;
     }
     
-    public RoomType getRoomTypeById(int roomTypeId) {
+    public RoomType getRoomTypeById( String roomTypeId) {
         String sql = "SELECT TOP (1000) [RoomTypeID]\n"
                 + "      ,[RoomTypeName]\n"
                 + "      ,[RoomTypePrice]\n"
@@ -63,7 +63,7 @@ public class RoomTypeDAO {
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, roomTypeId);
+            ps.setString(1, roomTypeId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 RoomType r = new RoomType();
