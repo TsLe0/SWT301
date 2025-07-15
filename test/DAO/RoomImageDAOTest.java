@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package DAO;
 
 import Models.RoomImage;
@@ -10,25 +6,30 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-/**
- *
- * @author phuon
- */
 public class RoomImageDAOTest {
+
+    private Connection mockConn;
+    private PreparedStatement mockPs;
+    private ResultSet mockRs;
+
+    @Before
+    public void setUp() throws Exception {
+        mockConn = mock(Connection.class);
+        mockPs = mock(PreparedStatement.class);
+        mockRs = mock(ResultSet.class);
+
+        when(mockConn.prepareStatement(anyString())).thenReturn(mockPs);
+        when(mockPs.executeQuery()).thenReturn(mockRs);
+    }
 
     // ✅ TC01: Có 1 ảnh trả về đúng
     @Test
     public void test_TC01_ValidRoomTypeId_WithData() throws Exception {
-        Connection mockConn = mock(Connection.class);
-        PreparedStatement mockPs = mock(PreparedStatement.class);
-        ResultSet mockRs = mock(ResultSet.class);
-
-        when(mockConn.prepareStatement(anyString())).thenReturn(mockPs);
-        when(mockPs.executeQuery()).thenReturn(mockRs);
         when(mockRs.next()).thenReturn(true, false);
         when(mockRs.getInt(1)).thenReturn(101);
         when(mockRs.getInt(2)).thenReturn(5);
@@ -58,16 +59,10 @@ public class RoomImageDAOTest {
         assertEquals("img_101.jpg", r.getRoomImages());
     }
 
-    // ✅ TC02: Không có ảnh trả về
+    // ✅ TC02: RoomTypeID hợp lệ nhưng không có dữ liệu
     @Test
     public void test_TC02_ValidRoomTypeId_NoData() throws Exception {
-        Connection mockConn = mock(Connection.class);
-        PreparedStatement mockPs = mock(PreparedStatement.class);
-        ResultSet mockRs = mock(ResultSet.class);
-
-        when(mockConn.prepareStatement(anyString())).thenReturn(mockPs);
-        when(mockPs.executeQuery()).thenReturn(mockRs);
-        when(mockRs.next()).thenReturn(false); // không có kết quả
+        when(mockRs.next()).thenReturn(false); 
 
         List<RoomImage> list = new ArrayList<>();
         try {
@@ -75,7 +70,7 @@ public class RoomImageDAOTest {
             ps.setInt(1, 999);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                // không vào đây
+                // không thêm gì vào list
             }
         } catch (Exception e) {
             fail("Không nên lỗi");
@@ -85,26 +80,18 @@ public class RoomImageDAOTest {
         assertTrue(list.isEmpty());
     }
 
-    // ✅ TC03: RoomTypeID âm
     @Test
     public void test_TC03_InvalidRoomTypeId_Empty() throws Exception {
-        Connection mockConn = mock(Connection.class);
-        PreparedStatement mockPs = mock(PreparedStatement.class);
-        ResultSet mockRs = mock(ResultSet.class);
-
-        when(mockConn.prepareStatement(anyString())).thenReturn(mockPs);
-        when(mockPs.executeQuery()).thenReturn(mockRs);
-        when(mockRs.next()).thenReturn(false); // không có kết quả
+        when(mockRs.next()).thenReturn(false); 
 
         List<RoomImage> list = new ArrayList<>();
         try {
-            // Giả lập trường hợp không set RoomTypeID, mặc định là 0 (hoặc giả định người dùng nhập "")
-            int roomTypeID = 0; // giả sử lỗi khi không parse được ("" → 0)
+            int roomTypeID = 0;
             PreparedStatement ps = mockConn.prepareStatement("SELECT * FROM RoomImage WHERE RoomTypeID = ?");
             ps.setInt(1, roomTypeID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                // không vào đây
+                // không thêm gì vào list
             }
         } catch (Exception e) {
             fail("Không nên lỗi khi RoomTypeID rỗng");
@@ -113,5 +100,4 @@ public class RoomImageDAOTest {
         assertNotNull(list);
         assertTrue(list.isEmpty());
     }
-
 }
